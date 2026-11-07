@@ -1,31 +1,51 @@
 # Signal Board
 
-**Make room for the signal.** Signal Board is a personal command center concept for turning a noisy Discord into a calm, reviewable plan. A Switch-connected agent sorts messages into urgent actions, planned tasks, follow-ups, and quieted context. The person stays in control of calendar additions and replies.
+**Make room for the signal.** Signal Board is a chat-first personal planning workflow for turning a noisy Discord room into a calm, source-linked plan. Codex joins the room through Switch, groups related messages, flags genuine urgency, and prepares a next-day brief. The person reviews the result and stays in control of replies and calendar changes.
 
-## Current prototype
+## Project status
 
-The dashboard in `index.html` is a self-contained interactive front-end with sample messages. It demonstrates category filters, source links, a next-day briefing, digest feedback, and an approval step before adding a suggested calendar event. Calendar approval is simulated in the browser; the Discord messages are sample content. No Discord or calendar account is connected yet.
+- `signal-planner.template.yaml` is the Switch room template for the Codex agent.
+- `index.html` is an optional neon planner UI concept with sample messages. It is not connected to Discord or Switch and is not required for the chat workflow.
+- Calendar changes and outgoing replies are not wired up. The agent proposes and drafts; a person must review external actions.
 
-## Intended Switch workflow
+Do not describe the project as a live Discord integration until the real Switch room has been connected and demonstrated.
 
-1. Connect a selected Discord channel to a Switch room.
-2. Add a triage agent to the room. It classifies messages as `urgent`, `plan`, `waiting`, or `fyi`; extracts a task, due date, suggested next action, and source message link; and explains why it surfaced the item.
-3. Have the agent post structured signal cards or a daily briefing back into the Switch room. The dashboard consumes that room output and renders the board.
-4. When the user approves a calendar suggestion, create the calendar event and report success back in the Switch room. Draft replies for review before posting.
+## Set up the Switch room
 
-Keep the first live version scoped to one server, a few channels, one calendar, and human approval for external actions. Avoid silently sending replies or creating events.
+1. In Switch Console, finish setting up a local Switch server and select **Codex** as the agent provider.
+2. Import `signal-planner.template.yaml` in Switch Console. It creates a room and one `signal-planner` agent. Confirm the provider resolves to Codex.
+3. Connect Discord to the Switch server using the Console's **Messaging apps** section. You need a Discord server where you can add a bot and manage channels.
+4. In Discord Developer Portal, create the bot, enable **Server Members Intent** and **Message Content Intent**, and invite it with the `bot` and `applications.commands` scopes plus the permissions listed in the [Switch Discord guide](https://docs.switchagents.ai/switch-rooms/deploy/messaging-apps/discord).
+5. Paste the bot token and Discord server ID directly into Switch Console. **Never add the bot token to this repository or paste it into chat.**
+6. Post a message in the Discord channel you want to use. Switch creates the matching room when a message or command appears. Confirm the room and Discord connection are visible in Switch Console.
+
+## Try the workflow
+
+In the connected Discord channel, ask the agent to:
+
+```text
+@signal-planner triage the recent messages. Group related items, show DO NOW / PLAN / WAITING / FYI, explain why each item surfaced, and include a link to its source.
+```
+
+Then try:
+
+```text
+@signal-planner prepare tomorrow's brief from this room. Separate confirmed dates from suggestions that need my approval.
+```
+
+The template tells the agent not to invent dates or owners, silently send replies, or claim calendar changes are complete.
+
+## Optional planner UI
+
+Open `index.html` in a browser. It is a self-contained visual prototype with category filters, a next-day brief, and a simulated calendar approval interaction. Its sample Discord messages are illustrative only; they do not come from a connected server.
 
 ## Demo path
 
-1. Show a busy Discord room entering through Switch.
-2. Show the agent grouping routine chatter and flagging an urgent deadline with its original message link.
-3. Open the next-day briefing and inspect why an item was included.
-4. Approve a proposed calendar event and show the board update.
+1. Show real messages arriving from one Discord channel through Switch.
+2. Ask the Codex agent to triage the room and show grouped signals with source links.
+3. Ask it to prepare tomorrow's brief and explain one item's priority.
+4. Review a draft action in chat. Demonstrate an external action only if it is actually connected and approved.
 
-## Run locally
+## Hackathon submission
 
-Open `index.html` in a browser. The prototype uses no build step or package installation. `dist/index.html` is the static deployment copy.
-
-## Submission notes
-
-Explain the Switch room, agent instructions, and message-to-board flow in the final README/video. Replace sample cards with messages from a real Switch-connected Discord room before presenting this as a live integration. Switch should be central: the chat room is where context is shared and the agent reports work, while the dashboard is the user's review and approval surface.
+The repository is public. Before submitting, finish the Discord connection, capture a sub-three-minute video of Codex working in the real Switch/Discord room, and confirm this README matches the setup you demonstrated. A live deployment link is optional; a dashboard is not required for the chat workflow.
