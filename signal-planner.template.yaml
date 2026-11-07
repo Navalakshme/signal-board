@@ -1,5 +1,5 @@
 agents:
-  - name: "{team}-signal-planner"
+  - name: "signal-planner"
     description: "Turns a busy chat room into a calm, prioritized plan."
     addressing: anyone
     provider: "{provider}"
@@ -36,11 +36,11 @@ agents:
       Keep summaries short, calm, and useful; omit routine chatter unless asked.
 
 room:
-  name: "{team}-signal-planner"
+  name: "signal-planner"
   bridge: "{bridge}"
   agents: ["{team}-signal-planner"]
   users: ["{$creator}"]
 
 kickoff: |
-  @{team}-signal-planner: help me turn this room's messages into a calm plan.
+  @signal-planner: help me turn this room's messages into a calm plan.
   First group related items, classify them, and link every signal back to its source.
